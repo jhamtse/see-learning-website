@@ -610,33 +610,394 @@
                 return;
             }
             
-            // Set game content based on type
-            if (gameType === 'resilient-zone') {
-                title.textContent = 'Resilient Zone Adventure';
-                // You would set the source to your actual game files
-                frame.src = 'data:text/html;charset=utf-8,' + encodeURIComponent(`
-                    <div style="display: flex; align-items: center; justify-content: center; height: 100vh; font-family: Arial; background: linear-gradient(135deg, #87CEEB, #98FB98);">
-                        <div style="text-align: center; color: white;">
-                            <div style="font-size: 4rem; margin-bottom: 1rem;">🌟</div>
-                            <h2>Resilient Zone Adventure</h2>
-                            <p>This would be your actual game content!</p>
-                            <p>Upload your HTML game files to display here.</p>
-                        </div>
-                    </div>
-                `);
-            } else if (gameType === 'mindful-heart') {
-                title.textContent = 'Mindful Heart Explorer';
-                frame.src = 'data:text/html;charset=utf-8,' + encodeURIComponent(`
-                    <div style="display: flex; align-items: center; justify-content: center; height: 100vh; font-family: Arial; background: linear-gradient(135deg, #667eea, #764ba2);">
-                        <div style="text-align: center; color: white;">
-                            <div style="font-size: 4rem; margin-bottom: 1rem;">🧠💝</div>
-                            <h2>Mindful Heart Explorer</h2>
-                            <p>This would be your actual game content!</p>
-                            <p>Upload your HTML game files to display here.</p>
-                        </div>
-                    </div>
-                `);
+            // Game modal functions
+function openGame(gameType) {
+    const modal = document.getElementById('gameModal');
+    const frame = document.getElementById('gameFrame');
+    const title = document.getElementById('gameModalTitle');
+    
+    if (gameType === 'coming-soon') {
+        alert('This game is coming soon! Stay tuned for updates.');
+        return;
+    }
+    
+    // Set game content based on type
+    if (gameType === 'resilient-zone') {
+        title.textContent = 'Resilient Zone Adventure';
+        // Option 1: If you have a separate game file
+        // frame.src = 'games/resilient-zone.html';
+        
+        // Option 2: Embedded game (working version)
+        frame.src = 'data:text/html;charset=utf-8,' + encodeURIComponent(`
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Resilient Zone Adventure</title>
+    <style>
+        body {
+            font-family: 'Comic Sans MS', cursive, sans-serif;
+            background: linear-gradient(135deg, #87CEEB 0%, #98FB98 100%);
+            margin: 0;
+            padding: 20px;
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+        .game-container {
+            background: white;
+            border-radius: 20px;
+            padding: 30px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+            max-width: 600px;
+            width: 90%;
+            text-align: center;
+        }
+        .character {
+            width: 120px;
+            height: 120px;
+            border-radius: 50%;
+            margin: 0 auto 20px;
+            transition: all 0.5s ease;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 3em;
+            cursor: pointer;
+            animation: float 3s ease-in-out infinite;
+        }
+        @keyframes float {
+            0%, 100% { transform: translateY(0px); }
+            50% { transform: translateY(-10px); }
+        }
+        .resilient { 
+            background: linear-gradient(45deg, #90EE90, #98FB98);
+            border: 4px solid #32CD32;
+        }
+        .high-zone { 
+            background: linear-gradient(45deg, #FFB6C1, #FFA07A);
+            border: 4px solid #FF6347;
+            animation: shake 0.5s ease-in-out infinite;
+        }
+        .low-zone { 
+            background: linear-gradient(45deg, #B0C4DE, #D3D3D3);
+            border: 4px solid #708090;
+            opacity: 0.7;
+        }
+        @keyframes shake {
+            0%, 100% { transform: translateX(0); }
+            25% { transform: translateX(-5px); }
+            75% { transform: translateX(5px); }
+        }
+        .tool-button {
+            background: linear-gradient(45deg, #4CAF50, #45a049);
+            color: white;
+            border: none;
+            padding: 12px 20px;
+            border-radius: 25px;
+            cursor: pointer;
+            font-size: 1em;
+            margin: 5px;
+            transition: all 0.3s ease;
+        }
+        .tool-button:hover {
+            transform: translateY(-2px);
+        }
+        .zone-text {
+            font-size: 1.2em;
+            font-weight: bold;
+            margin: 15px 0;
+        }
+        .scenario {
+            background: #f0f8ff;
+            border-radius: 10px;
+            padding: 15px;
+            margin: 15px 0;
+        }
+    </style>
+</head>
+<body>
+    <div class="game-container">
+        <h1>🌟 Resilient Zone Adventure</h1>
+        <div class="character resilient" id="character" onclick="nextScenario()">😊</div>
+        <div class="zone-text" id="zoneText">In the Resilient Zone - Feeling Good!</div>
+        <div class="scenario" id="scenario">
+            Click on our friend to see how they're feeling!
+        </div>
+        <div>
+            <button class="tool-button" onclick="useBreathing()">🌬️ Deep Breathing</button>
+            <button class="tool-button" onclick="useGrounding()">🌱 Grounding</button>
+            <button class="tool-button" onclick="useResource()">💝 Think Good Thoughts</button>
+        </div>
+        <div style="margin-top: 20px; color: #666;">
+            <small>Practice SEE Learning skills to help our friend stay balanced!</small>
+        </div>
+    </div>
+
+    <script>
+        let currentZone = 'resilient';
+        let scenarios = [
+            { zone: 'high', emotion: '😰', text: 'Oh no! Our friend feels overwhelmed by a big test coming up.' },
+            { zone: 'low', emotion: '😔', text: 'Our friend is feeling tired and disconnected after a long day.' },
+            { zone: 'high', emotion: '😫', text: 'Our friend is stressed about making new friends.' }
+        ];
+        let currentScenario = 0;
+
+        function updateCharacter(zone, emotion) {
+            const character = document.getElementById('character');
+            const zoneText = document.getElementById('zoneText');
+            
+            character.className = 'character ' + zone;
+            character.textContent = emotion;
+            currentZone = zone;
+            
+            if (zone === 'resilient') {
+                zoneText.textContent = 'In the Resilient Zone - Feeling Balanced! 🌟';
+            } else if (zone === 'high') {
+                zoneText.textContent = 'In the High Zone - Feeling Overwhelmed 🔥';
+            } else {
+                zoneText.textContent = 'In the Low Zone - Feeling Disconnected 🌧️';
             }
+        }
+
+        function nextScenario() {
+            if (currentZone === 'resilient' && currentScenario < scenarios.length) {
+                const scenario = scenarios[currentScenario];
+                document.getElementById('scenario').textContent = scenario.text;
+                updateCharacter(scenario.zone, scenario.emotion);
+                currentScenario++;
+            }
+        }
+
+        function useBreathing() {
+            if (currentZone !== 'resilient') {
+                updateCharacter('resilient', '😊');
+                document.getElementById('scenario').textContent = 'Deep breathing helped! Our friend feels calm and centered again. 🌬️';
+                setTimeout(() => {
+                    document.getElementById('scenario').textContent = 'Click on our friend for the next challenge!';
+                }, 2000);
+            }
+        }
+
+        function useGrounding() {
+            if (currentZone !== 'resilient') {
+                updateCharacter('resilient', '😊');
+                document.getElementById('scenario').textContent = 'Grounding worked! Feeling connected to what supports us. 🌱';
+                setTimeout(() => {
+                    document.getElementById('scenario').textContent = 'Click on our friend for the next challenge!';
+                }, 2000);
+            }
+        }
+
+        function useResource() {
+            if (currentZone !== 'resilient') {
+                updateCharacter('resilient', '😊');
+                document.getElementById('scenario').textContent = 'Thinking of good things helped! Our friend feels safe and happy. 💝';
+                setTimeout(() => {
+                    document.getElementById('scenario').textContent = 'Click on our friend for the next challenge!';
+                }, 2000);
+            }
+        }
+    </script>
+</body>
+</html>
+        `);
+        
+    } else if (gameType === 'mindful-heart') {
+        title.textContent = 'Mindful Heart Explorer';
+        // Option 1: If you have a separate game file
+        // frame.src = 'games/mindful-heart.html';
+        
+        // Option 2: Embedded game (working version)
+        frame.src = 'data:text/html;charset=utf-8,' + encodeURIComponent(`
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Mindful Heart Explorer</title>
+    <style>
+        body {
+            font-family: 'Comic Sans MS', cursive, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            margin: 0;
+            padding: 20px;
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+        .game-container {
+            background: white;
+            border-radius: 20px;
+            padding: 30px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+            max-width: 600px;
+            width: 90%;
+            text-align: center;
+        }
+        .breathing-circle {
+            width: 120px;
+            height: 120px;
+            border-radius: 50%;
+            background: linear-gradient(45deg, #667eea, #764ba2);
+            margin: 20px auto;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-weight: bold;
+            transition: all 1s ease;
+            cursor: pointer;
+        }
+        .breathing-circle.active {
+            transform: scale(1.3);
+            background: linear-gradient(45deg, #f093fb, #f5576c);
+        }
+        .activity-btn {
+            background: linear-gradient(45deg, #667eea, #764ba2);
+            color: white;
+            border: none;
+            padding: 12px 20px;
+            border-radius: 25px;
+            cursor: pointer;
+            font-size: 1em;
+            margin: 5px;
+            transition: all 0.3s ease;
+        }
+        .activity-btn:hover {
+            transform: translateY(-2px);
+        }
+        .emotion-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 10px;
+            margin: 20px 0;
+        }
+        .emotion-card {
+            background: #f0f8ff;
+            border-radius: 10px;
+            padding: 15px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+        .emotion-card:hover {
+            transform: scale(1.05);
+            background: #e6f3ff;
+        }
+        .activity-content {
+            min-height: 200px;
+        }
+    </style>
+</head>
+<body>
+    <div class="game-container">
+        <h1>🧠💝 Mindful Heart Explorer</h1>
+        
+        <div class="activity-content" id="content">
+            <h3>🌬️ Breathing Practice</h3>
+            <p>Click the circle and breathe with it!</p>
+            <div class="breathing-circle" id="breathingCircle" onclick="startBreathing()">Breathe</div>
+            <p id="breathingText">Click to start</p>
+        </div>
+
+        <div style="margin-top: 20px;">
+            <button class="activity-btn" onclick="showBreathing()">🌬️ Breathing</button>
+            <button class="activity-btn" onclick="showEmotions()">❤️ Emotions</button>
+            <button class="activity-btn" onclick="showFocus()">🎯 Focus</button>
+        </div>
+    </div>
+
+    <script>
+        let breathingActive = false;
+        let breathingInterval;
+
+        function showBreathing() {
+            document.getElementById('content').innerHTML = \`
+                <h3>🌬️ Breathing Practice</h3>
+                <p>Click the circle and breathe with it!</p>
+                <div class="breathing-circle" id="breathingCircle" onclick="startBreathing()">Breathe</div>
+                <p id="breathingText">Click to start</p>
+            \`;
+        }
+
+        function showEmotions() {
+            document.getElementById('content').innerHTML = \`
+                <h3>❤️ Emotion Explorer</h3>
+                <p>Click on the emotion you're feeling right now:</p>
+                <div class="emotion-grid">
+                    <div class="emotion-card" onclick="selectEmotion('happy')">😊<br>Happy</div>
+                    <div class="emotion-card" onclick="selectEmotion('sad')">😢<br>Sad</div>
+                    <div class="emotion-card" onclick="selectEmotion('angry')">😡<br>Angry</div>
+                    <div class="emotion-card" onclick="selectEmotion('excited')">🤩<br>Excited</div>
+                    <div class="emotion-card" onclick="selectEmotion('worried')">😰<br>Worried</div>
+                    <div class="emotion-card" onclick="selectEmotion('calm')">😌<br>Calm</div>
+                </div>
+                <p id="emotionFeedback"></p>
+            \`;
+        }
+
+        function showFocus() {
+            document.getElementById('content').innerHTML = \`
+                <h3>🎯 Focus Training</h3>
+                <p>Count how many times you see the star: ⭐</p>
+                <div style="font-size: 2em; line-height: 1.5;">
+                    ⭐ 🌙 ⭐ 🌟 ⭐ 🌙 ⭐ 🌟 ⭐
+                </div>
+                <button class="activity-btn" onclick="checkFocus()">I counted them!</button>
+                <p id="focusFeedback"></p>
+            \`;
+        }
+
+        function startBreathing() {
+            const circle = document.getElementById('breathingCircle');
+            const text = document.getElementById('breathingText');
+            
+            if (!breathingActive) {
+                breathingActive = true;
+                let phase = 'in';
+                
+                breathingInterval = setInterval(() => {
+                    if (phase === 'in') {
+                        circle.classList.add('active');
+                        text.textContent = 'Breathe In... 🌬️';
+                        phase = 'out';
+                    } else {
+                        circle.classList.remove('active');
+                        text.textContent = 'Breathe Out... 💨';
+                        phase = 'in';
+                    }
+                }, 2000);
+                
+                setTimeout(() => {
+                    clearInterval(breathingInterval);
+                    breathingActive = false;
+                    circle.classList.remove('active');
+                    text.textContent = 'Great job! Click to practice again.';
+                }, 20000);
+            }
+        }
+
+        function selectEmotion(emotion) {
+            const feedback = document.getElementById('emotionFeedback');
+            feedback.textContent = \`You selected \${emotion}! It's great to notice how you're feeling. All emotions are okay to have. 💝\`;
+        }
+
+        function checkFocus() {
+            const feedback = document.getElementById('focusFeedback');
+            feedback.textContent = 'Great focus! There were 5 stars (⭐). Paying attention helps us learn better! 🎯';
+        }
+    </script>
+</body>
+</html>
+        `);
+    }
+    
+    modal.style.display = 'block';
+    document.body.style.overflow = 'hidden';
+}
             
             modal.style.display = 'block';
             document.body.style.overflow = 'hidden'; // Prevent background scrolling
